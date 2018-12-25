@@ -82,6 +82,7 @@ class DataManager(object):
             )
 
             # batch_dt: converted from label array
+            # TODO: bookmark
             batch_dt = sparse_tuple_from(
                 np.reshape(
                     np.array(raw_batch_la),
