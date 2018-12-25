@@ -1,0 +1,1 @@
+python run.py --train --examples_path "/home/chadrick/github/TextRecognitionDataGenerator/TextRecognitionDataGenerator/traindata" -miw 500
