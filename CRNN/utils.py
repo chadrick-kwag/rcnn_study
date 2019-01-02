@@ -26,6 +26,8 @@ def sparse_tuple_from(sequences, dtype=np.int32):
 def resize_image(image, input_width):
     """
         Resize an image to the "good" input size
+
+        but I'm not sure about why the author is resizing it like this.... it is weird...
     """
 
     im_arr = imread(image, mode='L')
@@ -34,6 +36,7 @@ def resize_image(image, input_width):
         c = input_width
         ratio = float(input_width) / c
         final_arr = imresize(im_arr, (int(32 * ratio), input_width))
+        # but then final_arr's row size may not always be 32!! wtf?
     else:
         final_arr = np.zeros((32, input_width))
         ratio = 32.0 / r
@@ -42,6 +45,10 @@ def resize_image(image, input_width):
     return final_arr, c
 
 def label_to_array(label):
+    """
+    convert label string to a list of each char indices
+    """
+
     print("label_to_array: {}".format(label))
     # label = list(label)
     # label=str(label)

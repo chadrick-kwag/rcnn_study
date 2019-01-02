@@ -46,6 +46,9 @@ class DataManager(object):
         for f in os.listdir(self.examples_path):
             if len(f.split('_')[0]) > self.max_char_count:
                 continue
+
+            # initial_len = col size
+            # arr: [row,col] shaped np.array
             arr, initial_len = resize_image(
                 os.path.join(self.examples_path, f),
                 self.max_image_width
@@ -90,6 +93,8 @@ class DataManager(object):
                 )
             )
 
+            # I think this swapping is changing [row,col] -> [col,row] for each input image. 
+            # this way, we can feed each vertical slice of the image starting from the left into the model input.
             raw_batch_x = np.swapaxes(raw_batch_x, 1, 2)
 
             batch_x = np.reshape(
