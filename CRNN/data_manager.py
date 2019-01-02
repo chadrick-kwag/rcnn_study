@@ -29,6 +29,7 @@ class DataManager(object):
 
     def __load_data(self):
         """
+            this function populates self.data
             Load all the images in the folder
         """
 
@@ -81,8 +82,7 @@ class DataManager(object):
                 (-1)
             )
 
-            # batch_dt: converted from label array
-            # TODO: bookmark
+            # batch_dt: converted from char index array. in other words, this is an array of one-hot-vector
             batch_dt = sparse_tuple_from(
                 np.reshape(
                     np.array(raw_batch_la),
