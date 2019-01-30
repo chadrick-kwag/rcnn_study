@@ -9,6 +9,11 @@ from scipy.misc import imsave
 
 class DataManager(object):
     def __init__(self, batch_size, model_path, examples_path, max_image_width, train_test_ratio, max_char_count):
+        """
+        max_image_width: the width that will be used in input placeholder. this is the upper limit for the width of the prepared image.
+        """
+
+
         if train_test_ratio > 1.0 or train_test_ratio < 0:
             raise Exception('Incoherent ratio!')
 
@@ -44,7 +49,10 @@ class DataManager(object):
 
         print("example files size:{}".format(len(example_files)))
         for f in os.listdir(self.examples_path):
-            if len(f.split('_')[0]) > self.max_char_count:
+
+            label_string = f.split('_')[0]
+
+            if len(label_string) > self.max_char_count:
                 continue
 
             # initial_len = col size
@@ -53,14 +61,23 @@ class DataManager(object):
                 os.path.join(self.examples_path, f),
                 self.max_image_width
             )
+
+            # arr: the array of image data
+            # 
+
+            label_char_index_list = label_to_array(label_string)
+
             examples.append(
                 (
                     arr,
-                    f.split('_')[0],
-                    label_to_array(f.split('_')[0])
+                    label_string,
+                    label_char_index_list
                 )
             )
+
+            # debug 
             imsave('blah.png', arr)
+            
             count += 1
 
         print("__load_data: len(examples)={}".format(len(examples)))
@@ -80,18 +97,22 @@ class DataManager(object):
             # batch_la: batch of la(label array. sequence of char index)
             # batch_y: batch of the actual strings
 
+            # converting label_string into a numpy array with shape=(1,) where the first element
+            # contains the label_string
             batch_y = np.reshape(
                 np.array(raw_batch_y),
                 (-1)
             )
 
             # batch_dt: converted from char index array. in other words, this is an array of one-hot-vector
+            # batch_dt is a tuple
             batch_dt = sparse_tuple_from(
                 np.reshape(
                     np.array(raw_batch_la),
                     (-1)
                 )
             )
+            print("batch_dt:{}".format(batch_dt))
 
             # I think this swapping is changing [row,col] -> [col,row] for each input image. 
             # this way, we can feed each vertical slice of the image starting from the left into the model input.

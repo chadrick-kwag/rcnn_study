@@ -63,7 +63,7 @@ def parse_arguments():
         "--max_image_width",
         type=int,
         nargs="?",
-        help="Maximum width of an example before truncating",
+        help="Maximum width of an example before truncating. in pixels. this is the width used in input placeholder",
         default=100
     )
 
